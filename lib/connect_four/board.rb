@@ -12,12 +12,19 @@ module ConnectFour
 		end
 
 		def entry(r, c)
-			raise ArgumentError if (r < 0 || r >= @n_rows || c < 0 || c >= @n_cols)
+			raise ArgumentError if (	r < 0 || r >= @n_rows || c < 0 || c >= @n_cols)
 			@positions[r][c]
 		end
 
+		def make_move(player, column)
+			row = lowest_available_index(column)
+			raise ArgumentError if row.nil?
+			raise ArgumentError if player.nil?
+			@positions[row][column] = player
+		end
 
 
+		#TODO: Implement a string interpretation of the board.
 		def to_s
 			s = edge_row
 
@@ -27,7 +34,6 @@ module ConnectFour
 			s
 		end
 
-		private
 		def edge_row
 			"-" * @n_cols
 		end
@@ -35,14 +41,15 @@ module ConnectFour
 		def lowest_available_index(col)
 			raise ArgumentError if col < 0 || col >= @n_cols
 			ind = @n_rows - 1
-			return nil unless @positions[ind][col].nil? 
-			while (@positions[ind][col]).nil?
+			return nil unless @positions[ind][col].nil?
+			# p @positions[ind][col]
+			while @positions[ind][col].nil? && ind >= 0
 				ind -= 1
 			end
-
-			return (ind < 0 ? 0 : ind)
+			return ind + 1
 		end
 
+		private
 		def setup(r, c)
 			arr = Array.new(r)
 			r.times do |index|

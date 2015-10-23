@@ -1,6 +1,6 @@
 require 'spec_helper'
 module ConnectFour
-	describe Board do |l|
+	describe Board do
 		describe "#initialize" do
 		  it "initializes to 6 rows by 7 columns by default" do
 	  	    board = Board.new
@@ -51,6 +51,71 @@ module ConnectFour
 				end
 			end
 		end
+
+		describe "#lowest_available_index" do
+			let(:board) {Board.new}
+
+			it "notes that bottom row is valid on new board" do
+			  board.n_cols.times do |i|
+		  		expect(board.lowest_available_index(i)).to eq 0
+			  end
+			end
+
+			it "notes the correct rrow after moves have been made" do
+				positions = board.positions
+				# p positions
+				col = 2
+				positions[0][col] = :player_1 #hacky attempt
+				positions[1][col] = :player_2
+				expect(board.lowest_available_index(col)).to eq 2
+			end
+
+			it "raises ArgumentError if column out of bounds" do
+				expect{board.lowest_available_index(-1)}.to raise_error ArgumentError
+				expect{board.lowest_available_index(board.n_cols)}.to raise_error ArgumentError
+			end
+		end
+
+		describe "#make_move" do
+		  let(:board) {Board.new}
+		  let(:column) {2}
+
+		  context "invalid input" do
+		  	it "raises Argument error with bad column" do
+		  	  expect {board.make_move(:player, -1)}.to raise_error ArgumentError
+		  	  expect {board.make_move(:player, board.n_cols)}.to raise_error ArgumentError
+		  	end
+
+		  	it "raises ArgumentError if player is nil" do
+		  		expect{board.make_move(nil, 1)}.to raise_error ArgumentError
+		  	end
+
+		  	it "raises ArgumentError if there are no rows available " do
+		  		board.should_receive(:lowest_available_index).with(1).and_return nil
+		  		expect{board.make_move(:player, 1)}.to raise_error ArgumentError
+		  	end
+		  end
+
+		  context "making moves on a new board" do
+		  	it "makes a move on a new board" do
+		  	  board.make_move(:player_1,column)
+		  	  expect(board.entry(0, column)).to eq :player_1
+		  	  expect(board.lowest_available_index(column)).to eq 1
+		  	end
+
+		  	it "makes several moves on the same column" do
+		  		board = Board.new
+		  		board.make_move(:player_1, column)
+		  		board.make_move(:player_2, column)
+		  		expect(board.entry(1, column)).to eq :player_2
+		  		expect(board.lowest_available_index(column)).to eq 2
+		  	end
+
+		  end
+		
+
+		end
+
 	end
 	end
 end
