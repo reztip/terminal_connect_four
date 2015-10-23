@@ -107,8 +107,10 @@ module ConnectFour
 		  		board = Board.new
 		  		board.make_move(:player_1, column)
 		  		board.make_move(:player_2, column)
+		  		board.make_move(:player_1, column)
 		  		expect(board.entry(1, column)).to eq :player_2
-		  		expect(board.lowest_available_index(column)).to eq 2
+		  		expect(board.entry(2, column)).to eq :player_1
+		  		expect(board.lowest_available_index(column)).to eq 3
 		  	end
 
 		  end
