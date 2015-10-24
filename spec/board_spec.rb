@@ -114,7 +114,57 @@ module ConnectFour
 		  	end
 
 		  end
-		
+
+		end
+
+		describe "#game_over?" do
+		  before(:each) {@board = Board.new}
+		  context "game is not over" do
+		    it "returns false for a new game" do
+		    	expect(@board.game_over?).to be false
+		    end
+
+		    it "returns false for different not-finished game" do
+		    	col = 1
+		    	@board.make_move(:player_1, col)
+		    	@board.make_move(:player_1, col)
+		    	@board.make_move(:player_1, col)
+		    	expect(@board.game_over?).to be false
+		    end
+		  end
+
+		  context "game is over" do
+		  	it "detects trivial game over" do
+		  		col = 1
+		  		@board.make_move(:player_1, col)
+		  		@board.make_move(:player_1, col)
+		  		@board.make_move(:player_1, col)
+		  		@board.make_move(:player_1, col)
+		  		expect(@board.game_over?).to be true
+		  	end
+
+		  	it "detects horizontal game over" do
+		  		@board.make_move(:player_1, 0)
+		  		@board.make_move(:player_1, 1)
+		  		@board.make_move(:player_1, 2)
+		  		@board.make_move(:player_1, 3)
+		  		expect(@board.game_over?).to be true
+		  	end
+
+		  	it "detects a diagonal game over" do
+		  		@board.make_move(:player_1, 0)
+		  		@board.make_move(:player_2, 1)
+		  		@board.make_move(:player_1, 1)
+		  		@board.make_move(:player_1, 2)
+		  		@board.make_move(:player_2, 2)
+		  		@board.make_move(:player_1, 2)
+		  		@board.make_move(:player_2, 3)
+		  		@board.make_move(:player_2, 3)
+		  		@board.make_move(:player_1, 3)
+		  		@board.make_move(:player_1, 3)
+		  		expect(@board.game_over?).to be true
+		  	end
+		  end
 
 		end
 
