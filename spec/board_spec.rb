@@ -117,6 +117,26 @@ module ConnectFour
 
 		end
 
+		describe "#make_moves" do
+		  it "makes a series of moves correctly" do
+		  	board = Board.new
+		  	board.make_moves(:player_1, 0,1,0,1,2,3,1)
+		  	expect(board.lowest_available_index(0)).to eq 2
+		  	expect(board.lowest_available_index(1)).to eq 3
+		  	expect(board.lowest_available_index(2)).to eq 1
+		  	expect(board.lowest_available_index(3)).to eq 1
+		  end
+
+		  it "accepts an array of moves" do
+		  	board = Board.new
+		  	board.make_moves(:player_1, [0,1,0,1,2,3,1])
+		  	expect(board.lowest_available_index(0)).to eq 2
+		  	expect(board.lowest_available_index(1)).to eq 3
+		  	expect(board.lowest_available_index(2)).to eq 1
+		  	expect(board.lowest_available_index(3)).to eq 1
+		  end
+		end
+
 		describe "#game_over?" do
 		  before(:each) {@board = Board.new}
 		  context "game is not over" do

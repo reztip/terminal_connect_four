@@ -23,6 +23,16 @@ module ConnectFour
 			@positions[row][column] = player
 		end
 
+		def make_moves(first_player, *args)
+			args = args.first if args.first.is_a?(Array)
+			#make sure args is an array args = (args.first.class)
+			player = first_player
+			args.each do |column|
+				make_move(player, column)
+				player = (player == :player_1 ? :player_2 : :player_1)
+			end
+		end
+
 		def game_over?
 			vertical_game_over? || horizontal_game_over? || fromleft_diagonal_game_over? || fromright_diagonal_game_over?
 		end
