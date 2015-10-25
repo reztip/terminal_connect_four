@@ -118,22 +118,30 @@ module ConnectFour
 		end
 
 		describe "#make_moves" do
+			before(:each) {@board = Board.new}
 		  it "makes a series of moves correctly" do
-		  	board = Board.new
-		  	board.make_moves(:player_1, 0,1,0,1,2,3,1)
-		  	expect(board.lowest_available_index(0)).to eq 2
-		  	expect(board.lowest_available_index(1)).to eq 3
-		  	expect(board.lowest_available_index(2)).to eq 1
-		  	expect(board.lowest_available_index(3)).to eq 1
+		  	@board.make_moves(:player_1, 0,1,0,1,2,3,1)
+		  	expect(@board.lowest_available_index(0)).to eq 2
+		  	expect(@board.lowest_available_index(1)).to eq 3
+		  	expect(@board.lowest_available_index(2)).to eq 1
+		  	expect(@board.lowest_available_index(3)).to eq 1
 		  end
 
 		  it "accepts an array of moves" do
-		  	board = Board.new
-		  	board.make_moves(:player_1, [0,1,0,1,2,3,1])
-		  	expect(board.lowest_available_index(0)).to eq 2
-		  	expect(board.lowest_available_index(1)).to eq 3
-		  	expect(board.lowest_available_index(2)).to eq 1
-		  	expect(board.lowest_available_index(3)).to eq 1
+		  	@board.make_moves(:player_1, [0,1,0,1,2,3,1])
+		  	expect(@board.lowest_available_index(0)).to eq 2
+		  	expect(@board.lowest_available_index(1)).to eq 3
+		  	expect(@board.lowest_available_index(2)).to eq 1
+		  	expect(@board.lowest_available_index(3)).to eq 1
+		  end
+
+		  it "alternates players" do
+		  	@board.make_moves(:player_1, [0,1,0,1,2,3,1])
+		  	expect(@board.entry(0, 0)].to eq :player_1
+		  	expect(@board.entry(0, 1)].to eq :player_2
+		  	expect(@board.entry(1, 0)].to eq :player_1
+		  	expect(@board.entry(1, 1)].to eq :player_2
+
 		  end
 		end
 
@@ -146,9 +154,7 @@ module ConnectFour
 
 		    it "returns false for different not-finished game" do
 		    	col = 1
-		    	@board.make_move(:player_1, col)
-		    	@board.make_move(:player_1, col)
-		    	@board.make_move(:player_1, col)
+		    	@board.make_moves(:player_1, col, col, col)
 		    	expect(@board.game_over?).to be false
 		    end
 		  end
@@ -164,10 +170,7 @@ module ConnectFour
 		  	end
 
 		  	it "detects horizontal game over" do
-		  		@board.make_move(:player_1, 0)
-		  		@board.make_move(:player_1, 1)
-		  		@board.make_move(:player_1, 2)
-		  		@board.make_move(:player_1, 3)
+		  		@board.make_moves(:player_1, 0,0,1,1,2,2,3,3)
 		  		expect(@board.game_over?).to be true
 		  	end
 
