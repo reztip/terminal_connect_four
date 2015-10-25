@@ -136,11 +136,11 @@ module ConnectFour
 		  end
 
 		  it "alternates players" do
-		  	@board.make_moves(:player_1, [0,1,0,1,2,3,1])
-		  	expect(@board.entry(0, 0)].to eq :player_1
-		  	expect(@board.entry(0, 1)].to eq :player_2
-		  	expect(@board.entry(1, 0)].to eq :player_1
-		  	expect(@board.entry(1, 1)].to eq :player_2
+		  	@board.make_moves(:player_1, 0,1,0,1,2,3,1)
+		  	expect(@board.entry(0, 0)).to eq :player_1
+		  	expect(@board.entry(0, 1)).to eq :player_2
+		  	expect(@board.entry(1, 0)).to eq :player_1
+		  	expect(@board.entry(1, 1)).to eq :player_2
 
 		  end
 		end
@@ -149,6 +149,7 @@ module ConnectFour
 		  before(:each) {@board = Board.new}
 		  context "game is not over" do
 		    it "returns false for a new game" do
+          #puts @board.game_over?
 		    	expect(@board.game_over?).to be false
 		    end
 
@@ -187,9 +188,44 @@ module ConnectFour
 		  		@board.make_move(:player_1, 3)
 		  		expect(@board.game_over?).to be true
 		  	end
+
 		  end
 
+      context "board is full, no winner" do
+        it "is a (stubbed) tie game" do
+          board = Board.new
+          board.stub(:tie) {:tie}
+          expect(board.game_over?).to eq :tie
+        end
+
+      end
+
 		end
+
+		describe "#winner" do
+		  before(:each) {@board = Board.new}
+		  context "game not over" do
+  		    it "returns nil if game not over" do
+              expect(@board.winner).to be_nil
+  		    end
+		  end
+
+      context "player_1 wins" do
+        it "returns the right winner" do
+          @board.make_moves(:player_1, 0,1,0,1,0,1,0)
+          expect(@board.winner).to eq :player_1
+        end
+      end
+
+      context "player_2 wins" do
+         it "returns the right winner" do
+          @board.make_moves(:player_1, 0,1,0,1,0,1,2,1)
+          expect(@board.winner).to eq :player_2
+        end
+      end
+		end
+
+
 
 	end
 	end
