@@ -71,8 +71,7 @@ module ConnectFour
 				s << "\n"
 			end
 			s << edge_row + "\n"
-			s << "Player 1: #{@@p1_representation}\n"
-			s << "Player 2: #{@@p2_representation}\n"
+			s << "  " + (0..@n_cols -1).to_a.join('  ') + "\n"
 			return s
 		end
 
@@ -87,6 +86,11 @@ module ConnectFour
 				ind -= 1
 			end
 			return ind + 1
+		end
+
+		def col_full?(col)
+			return true if col < 0 || col >= @n_cols
+			lowest_available_index(col).nil?
 		end
 
 		private
